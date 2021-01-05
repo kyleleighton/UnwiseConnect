@@ -4,6 +4,11 @@ import Select from 'react-select';
 import BootstrapTable from 'react-bootstrap-table-next';
 
 class SearchColumns extends React.Component {
+  state = {
+    columns: [],
+    rows: []
+  }
+
   componentDidUpdate = (prevProps) => {
     if (prevProps.columns !== this.props.columns) {
       this.compileColumns();
@@ -24,13 +29,30 @@ class SearchColumns extends React.Component {
         },
       })
     });
+    this.setState({
+      columns
+    });
+    columns.map(column => this.compileRows(column))
     return columns;
+  }
+
+  compileRows = (column) => {
+    const rows = this.props.rows.map(row => row[column.dataField])
+    const uniqueRowValues = [ ...new Set(rows) ];
+    this.setState({
+      rows: [
+        ...this.state.rows,
+        uniqueRowValues
+      ]
+    });
   }
 
   render() {
     return (
       <React.Fragment>
-        <BootstrapTable keyField='id' data={ this.compileColumns() } columns={ this.compileColumns() } />
+        {/* {this.state.columns !== [] && (
+          <BootstrapTable keyField='id' data={ this.state.rows } columns={ this.state.columns } />
+        )} */}
         <tr>
           {this.props.columns.map((column, i) => (
             <th key={`${column.property || i}-column-filter`} className="column-filter">
