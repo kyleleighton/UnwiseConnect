@@ -32,18 +32,26 @@ class SearchColumns extends React.Component {
     this.setState({
       columns
     });
-    columns.map(column => this.compileRows(column))
+    this.compileRows();
     return columns;
   }
 
-  compileRows = (column) => {
-    const rows = this.props.rows.map(row => row[column.dataField])
+  compileRows = () => {
+    const rows = this.props.rows.map(row => {
+      return {
+        'mobileGuid': row.mobileGuid,
+        'phase.path': row.phase.path,
+        'company.name': row['company.name'],
+        'id': row.id,
+        'summary': row.summary,
+        'impact': row.impact,
+        'budgetHours': row.budgetHours || '',
+        'status.name': row['status.name'],
+      }
+    })
     const uniqueRowValues = [ ...new Set(rows) ];
     this.setState({
-      rows: [
-        ...this.state.rows,
-        uniqueRowValues
-      ]
+      rows: uniqueRowValues
     });
   }
 
@@ -53,15 +61,7 @@ class SearchColumns extends React.Component {
         {/* {this.state.columns !== [] && (
           <BootstrapTable keyField='id' data={ this.state.rows } columns={ this.state.columns } />
         )} */}
-        <tr>
-          {this.props.columns.map((column, i) => (
-            <th key={`${column.property || i}-column-filter`} className="column-filter">
-              {column && column.property ?
-                this.renderFilter(column)
-              : ''}
-            </th>
-          ))}
-        </tr>
+
       </React.Fragment>
     );
   }
