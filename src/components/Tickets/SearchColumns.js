@@ -1,19 +1,46 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import Select from 'react-select';
+import BootstrapTable from 'react-bootstrap-table-next';
 
 class SearchColumns extends React.Component {
+  componentDidUpdate = (prevProps) => {
+    if (prevProps.columns !== this.props.columns) {
+      this.compileColumns();
+    }
+  }
+
+  compileColumns = () => {
+    let columns = [];
+    this.props.columns.map(column => {
+      columns.push({
+        dataField: column.property,
+        text: column.header.label,
+        sort: true,
+        sortCaret: (order, column) => {
+          if (!order || order === 'asc') return (<span className="sorting-arrow">Up</span>);
+          else if (order === 'desc') return (<span className="sorting-arrow down-arrow">Down</span>);
+          return null;
+        },
+      })
+    });
+    return columns;
+  }
+
   render() {
     return (
-      <tr>
-        {this.props.columns.map((column, i) => (
-          <th key={`${column.property || i}-column-filter`} className="column-filter">
-            {column && column.property ?
-              this.renderFilter(column)
-            : ''}
-          </th>
-        ))}
-      </tr>
+      <React.Fragment>
+        <BootstrapTable keyField='id' data={ this.compileColumns() } columns={ this.compileColumns() } />
+        <tr>
+          {this.props.columns.map((column, i) => (
+            <th key={`${column.property || i}-column-filter`} className="column-filter">
+              {column && column.property ?
+                this.renderFilter(column)
+              : ''}
+            </th>
+          ))}
+        </tr>
+      </React.Fragment>
     );
   }
 
