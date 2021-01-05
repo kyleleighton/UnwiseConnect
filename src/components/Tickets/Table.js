@@ -193,6 +193,7 @@ export default class TicketsTable extends React.Component {
           columns={visibleColumns}
           onChange={this.search}
           rows={rows}
+          ticketCount={this.props.tickets.length}
         />
       </div>
     );

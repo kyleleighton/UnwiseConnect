@@ -2,8 +2,9 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import Select from 'react-select';
 import BootstrapTable from 'react-bootstrap-table-next';
-import paginationFactory from 'react-bootstrap-table2-paginator';
+import paginationFactory, { PaginationProvider } from 'react-bootstrap-table2-paginator';
 import filterFactory, { textFilter, selectFilter } from 'react-bootstrap-table2-filter';
+import { formatRelativeWithOptions } from 'date-fns/fp';
 
 class SearchColumns extends React.Component {
   state = {
@@ -30,16 +31,33 @@ class SearchColumns extends React.Component {
 
     this.props.columns.map(column => {
       const extraOptions = (column.extraOptions || []).map(this.evaluateExtraOption.bind(this, column, this.props.rows));
-      const options = extraOptions.filter(option => option.label == 'All Complete');
+      const assignedOptions = extraOptions.filter(option => option.label == 'All Complete');
+      const options = (assignedOptions[0] && assignedOptions[0].value) || [];
 
-      console.log(options[0] && options[0].value)
-      columns.push({
+      console.log(options)
+
+      const defaultColumnData = {
         dataField: column.property,
         text: column.header.label,
-        sort: true,
-        filter: selectFilter({ options }),
-        formatter: cell => options[cell]
-      })
+        sort: true,        
+      }
+
+      if (column.filterType == 'dropdown') {
+        columns.push({
+          ...defaultColumnData,
+          filter: selectFilter({ options: { ...options } }),
+        })
+      } else if (column.filterType == 'none'){
+        columns.push({
+          dataField: column.property,
+          text: column.header.label,
+        })
+      } else {
+        columns.push({
+          ...defaultColumnData,
+          filter: textFilter()
+        })        
+      }
     });
     this.setState({
       columns
@@ -54,11 +72,17 @@ class SearchColumns extends React.Component {
         'mobileGuid': row.mobileGuid,
         'phase.path': row.phase.path,
         'company.name': row['company.name'],
+        'project.name': row['project.name'],
+        'actualHours': row.actualHours,
+        'billTime': row.billTime,
+        'resources': row.resources,
         'id': row.id,
         'summary': row.summary,
         'impact': row.impact,
         'budgetHours': row.budgetHours || '',
-        'status.name': row['status.name'],
+        'budgetHours': row.budgetHours || '',
+        'status.name': row.status.name,
+        'customFields': row.customFields
       }
     })
     const uniqueRowValues = [ ...new Set(rows) ];
@@ -68,20 +92,26 @@ class SearchColumns extends React.Component {
   }
 
   render() {
+    const paginationOption = {
+      custom: true,
+      sizePerPage: this.props.ticketCount,
+    };
     return (
       <React.Fragment>
         {this.state.columns.length > 0 && (
-          <BootstrapTable pagination={ paginationFactory()} filter={ filterFactory()} classes="table table-striped table-bordered" keyField='id' data={ this.state.rows } columns={ this.state.columns } />
+          <PaginationProvider
+            pagination={ paginationFactory(paginationOption) }
+          >
+            {
+              ({
+                paginationProps,
+                paginationTableProps
+              }) => (
+                <BootstrapTable { ...paginationTableProps } pagination={ paginationFactory()} filter={ filterFactory()} classes="table table-striped table-bordered" keyField='id' data={ this.state.rows } columns={ this.state.columns } />
+              ) 
+            }
+          </PaginationProvider>
         )}
-        {/* <tr>
-          {this.props.columns.map((column, i) => (
-            <th key={`${column.property || i}-column-filter`} className="column-filter">
-              {column && column.property ?
-                this.renderFilter(column)
-              : ''}
-            </th>
-          ))}
-        </tr> */}
       </React.Fragment>
     );
   }
