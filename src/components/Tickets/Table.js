@@ -188,30 +188,12 @@ export default class TicketsTable extends React.Component {
       {this.props.userColumns.length === 0 && (
         <div className="alert alert-warning">You haven't selected any columns above. That's why you don't see any tickets.</div>
       )}
-
-        <Table.Provider
-          className="table table-striped table-bordered"
+        <SearchColumns
+          query={query}
           columns={visibleColumns}
-        >
-          <Table.Header>
-            <SearchColumns
-              query={query}
-              columns={visibleColumns}
-              onChange={this.search}
-              rows={rows}
-            />
-          </Table.Header>
-          <Table.Body rowKey="id" rows={paginated.rows} onRow={this.onBodyRow} />
-          <TableFooter columns={visibleColumns} rows={paginated.rows} />
-        </Table.Provider>
-        {paginated.amount > 1 && (
-          <Pagination
-            changePage={this.changePage}
-            paginated={paginated}
-            pagination={pagination}
-            topHtmlId={this.getHtmlId()}
-          />
-        )}
+          onChange={this.search}
+          rows={rows}
+        />
       </div>
     );
   }

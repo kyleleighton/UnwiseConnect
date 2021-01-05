@@ -701,3 +701,7 @@ td.col--budget:not(:empty)::after {
   background-color: transparent;
   border: none;
 }
+
+.dark .table-bordered, .dark .table-bordered tr, .dark .table-bordered td {
+  width: 100vw;
+}
