@@ -31,46 +31,33 @@ class SearchColumns extends React.Component {
 
     this.props.columns.map(column => {
       const extraOptions = (column.extraOptions || []).map(this.evaluateExtraOption.bind(this, column, this.props.rows));
-      const assignedOptions = extraOptions.filter(option => option.label == 'All Complete');
-      const options = (assignedOptions[0] && assignedOptions[0].value) || [];
-
-      console.log(options)
+      const statusOptions = extraOptions.filter(option => option.label == 'All Complete');
+      const options = (statusOptions[0] && statusOptions[0].value) || [];
+      let dropdownOptions = [];
 
       const defaultColumnData = {
         dataField: column.property,
         text: column.header.label,
-        sort: true,        
+        sort: true,
+        editable: false
       }
 
-      if (column.filterType == 'dropdown') {
+      options.map(option => {
+        dropdownOptions.push({
+          value: option,
+          label: option,
+        })
+      })
+
+      if (column.filterType === 'dropdown') {
         columns.push({
           ...defaultColumnData,
-          filter: selectFilter({
-            options: { ...options },
-              editor: {
-                type: Type.SELECT,
-                getOptions: (setOptions, { row, column }) => {
-                  console.log(`current editing row id: ${row.id}`);
-                  console.log(`current editing column: ${column.dataField}`);
-                  return [{
-                    value: 'A',
-                    label: 'A'
-                  }, {
-                    value: 'B',
-                    label: 'B'
-                  }, {
-                    value: 'C',
-                    label: 'C'
-                  }, {
-                    value: 'D',
-                    label: 'D'
-                  }, {
-                    value: 'E',
-                    label: 'E'
-                  }];
-                }
-              }
-          }),
+          filter: selectFilter({ options: { ...options } }),
+          editable: true,
+          editor: {
+            type: Type.SELECT,
+            options: [...dropdownOptions]
+          }
         })
       } else if (column.filterType == 'none'){
         columns.push({
@@ -106,7 +93,7 @@ class SearchColumns extends React.Component {
         'impact': row.impact,
         'budgetHours': row.budgetHours || '',
         'actualHours': row.actualHours || '',
-        'status.name': row.status.name,
+        'status.name': row['status.name'],
         'customFields': row.customFields
       }
     })
@@ -132,7 +119,7 @@ class SearchColumns extends React.Component {
                 paginationProps,
                 paginationTableProps
               }) => (
-                <BootstrapTable cellEdit={ cellEditFactory({ mode: 'click', blurToSave: true }) } { ...paginationTableProps } pagination={ paginationFactory()} filter={ filterFactory()} classes="table table-striped table-bordered" keyField='id' data={ this.state.rows } columns={ this.state.columns } />
+                <BootstrapTable cellEdit={ cellEditFactory({ mode: 'click' }) } { ...paginationTableProps } pagination={ paginationFactory()} filter={ filterFactory()} classes="table table-striped table-bordered" keyField='id' data={ this.state.rows } columns={ this.state.columns } />
               ) 
             }
           </PaginationProvider>
