@@ -4,7 +4,7 @@ import Select from 'react-select';
 import BootstrapTable from 'react-bootstrap-table-next';
 import paginationFactory, { PaginationProvider } from 'react-bootstrap-table2-paginator';
 import filterFactory, { textFilter, selectFilter } from 'react-bootstrap-table2-filter';
-import { formatRelativeWithOptions } from 'date-fns/fp';
+import cellEditFactory, { Type } from 'react-bootstrap-table2-editor';
 
 class SearchColumns extends React.Component {
   state = {
@@ -45,7 +45,32 @@ class SearchColumns extends React.Component {
       if (column.filterType == 'dropdown') {
         columns.push({
           ...defaultColumnData,
-          filter: selectFilter({ options: { ...options } }),
+          filter: selectFilter({
+            options: { ...options },
+              editor: {
+                type: Type.SELECT,
+                getOptions: (setOptions, { row, column }) => {
+                  console.log(`current editing row id: ${row.id}`);
+                  console.log(`current editing column: ${column.dataField}`);
+                  return [{
+                    value: 'A',
+                    label: 'A'
+                  }, {
+                    value: 'B',
+                    label: 'B'
+                  }, {
+                    value: 'C',
+                    label: 'C'
+                  }, {
+                    value: 'D',
+                    label: 'D'
+                  }, {
+                    value: 'E',
+                    label: 'E'
+                  }];
+                }
+              }
+          }),
         })
       } else if (column.filterType == 'none'){
         columns.push({
@@ -107,7 +132,7 @@ class SearchColumns extends React.Component {
                 paginationProps,
                 paginationTableProps
               }) => (
-                <BootstrapTable { ...paginationTableProps } pagination={ paginationFactory()} filter={ filterFactory()} classes="table table-striped table-bordered" keyField='id' data={ this.state.rows } columns={ this.state.columns } />
+                <BootstrapTable cellEdit={ cellEditFactory({ mode: 'click', blurToSave: true }) } { ...paginationTableProps } pagination={ paginationFactory()} filter={ filterFactory()} classes="table table-striped table-bordered" keyField='id' data={ this.state.rows } columns={ this.state.columns } />
               ) 
             }
           </PaginationProvider>
