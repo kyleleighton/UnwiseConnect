@@ -105,7 +105,7 @@ class SearchColumns extends React.Component {
         'summary': row.summary,
         'impact': row.impact,
         'budgetHours': row.budgetHours || '',
-        'budgetHours': row.budgetHours || '',
+        'actualHours': row.actualHours || '',
         'status.name': row.status.name,
         'customFields': row.customFields
       }
