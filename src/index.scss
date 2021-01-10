@@ -301,6 +301,14 @@ body {
   text-align: right;
 }
 
+#table-dispatch-tickets table button {
+  white-space: nowrap;
+  height: 35px;
+  padding: 0 15px;
+  border-radius: $element__border-radius;
+  border: 1px solid #ccc;
+}
+
 td.col--budget:not(:empty)::after {
   content: ' hrs';
 }
@@ -572,6 +580,14 @@ td.col--budget:not(:empty)::after {
     hr {
       border-color: transparent;
       margin-bottom: 30px;
+    }
+  }
+
+  #table-dispatch-tickets table button {
+    border-color: $dark__border-color;
+
+    @include hover {
+      background-color: $dark__hover__background-color;
     }
   }
 
