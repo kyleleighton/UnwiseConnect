@@ -98,9 +98,12 @@ body {
   display: flex;
 
   .btn.btn-dark-mode {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    margin-left: 5px;
+
     @include allPseudoClasses {
       outline: none;
-      border: none;
     }
   }
 }
@@ -803,8 +806,13 @@ td.col--budget:not(:empty)::after {
   }
 }
 
-.dark.btn-dark-mode {
+button.dark.btn.btn-dark-mode {
   background-color: $c-dark-gray;
+  margin-left: 0;
+
+  @include allPseudoClasses {
+    background-color: $c-dark-gray;
+  }
 
   svg {
     fill: $dark__text-color;
