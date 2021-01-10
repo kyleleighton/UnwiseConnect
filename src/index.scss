@@ -415,9 +415,7 @@ td.col--budget:not(:empty)::after {
 .page.dark {
   background-color: #07090F;
   min-height: 100vh;
-}
 
-.dark {
   * {
     transition: background-color .4s;
   }
@@ -440,16 +438,32 @@ td.col--budget:not(:empty)::after {
     background-color: $dark__primary-color;
     color: $dark__text-color;
     border: 1px solid $dark__border-color;
+    border-radius: $element__border-radius;
   }
 
+  select,
   input {
-    border-radius: $element__border-radius;
     padding-left: 10px;
   }
 
+  button {
+    @include allPseudoClasses {
+      background-color: $dark__hover__background-color;
+      color: $dark__text-color;
+      border-color: $dark__border-color;
+      text-decoration: none;
+    }
+  }
+
   .column-filter-input,
-  .dispatch-fields .form-group:not(:first-of-type) input {
+  .dispatch-fields .form-group:not(:first-of-type) input,
+  .dispatch-fields .form-group:not(:first-of-type) select {
     height: 38px;
+  }
+
+  .dispatch-fields .form-group:first-of-type div *,
+  .column-filter .column-filter-dropdown div * {
+    background-color: $dark__primary-color;
   }
 
   .navbar-brand {
@@ -534,13 +548,10 @@ td.col--budget:not(:empty)::after {
     }
 
     button {
-      border-color: $dark__border-color !important;
+      border-color: $dark__border-color;
 
       @include allPseudoClasses {
-        background-color: $dark__hover__background-color !important;
-        color: $dark__text-color !important;
-        text-decoration: $button__hover__text-decoration;
-        border-color: $dark__border-color;
+        background-color: $dark__hover__background-color;
         transition: .3s;
       }
     }
@@ -568,14 +579,6 @@ td.col--budget:not(:empty)::after {
 
     button {
       margin-right: 5px;
-      border-radius: $element__border-radius;
-
-      @include hover {
-        border: 1px solid $dark__border-color;
-        background-color: $dark__hover__background-color;
-        color: $dark__text-color;
-        text-decoration: none;
-      }
     }
   }
 
@@ -585,14 +588,6 @@ td.col--budget:not(:empty)::after {
     hr {
       border-color: transparent;
       margin-bottom: 30px;
-    }
-  }
-
-  #table-dispatch-tickets table button {
-    border-color: $dark__border-color;
-
-    @include hover {
-      background-color: $dark__hover__background-color;
     }
   }
 
@@ -607,6 +602,10 @@ td.col--budget:not(:empty)::after {
     td {
       border-color: $dark__border-color !important;
     }
+  }
+
+  #table-dispatch-tickets table button {
+    border-color: $dark__border-color;
   }
 
   .table-striped {
@@ -760,19 +759,17 @@ td.col--budget:not(:empty)::after {
     align-items: center;
   }
 
-  .btn-queue {
-    @include hover {
-      background-color: $dark__secondary-color;
-    }
-  }
-
   .queue-list {
     * {
       color: $dark__text-color;
     }
 
-    li div {
-      margin-bottom: 10px;
+    li {
+      color: $dark__text-color !important; // override inline
+
+      div {
+        margin-bottom: 10px;
+      }
     }
 
     .btn-link {
@@ -780,11 +777,10 @@ td.col--budget:not(:empty)::after {
       margin-top: -3px;
       border-radius: 4px;
       height: 33px;
+    }
 
-      @include hover {
-        border: 1px solid $dark__border-color;
-        text-decoration: $button__hover__text-decoration;
-      }
+    input {
+      height: 33px;
     }
   }
 
@@ -813,10 +809,6 @@ td.col--budget:not(:empty)::after {
   svg {
     fill: $dark__text-color;
   }
-
-  @include allPseudoClasses {
-    background-color: $c-dark-gray;
-  }
 }
 
 .dark-modal {
@@ -825,6 +817,12 @@ td.col--budget:not(:empty)::after {
     border-color: $dark__border-color !important;
 
     * {
+      color: $dark__text-color;
+    }
+
+    .form-control {
+      background-color: $dark__primary-color;
+      border-color: $dark__border-color;
       color: $dark__text-color;
     }
   }
@@ -904,13 +902,6 @@ td.col--budget:not(:empty)::after {
 }
 
 .dark .btn.btn-expand {
-  @include allPseudoClasses{
-    background-color: $dark__hover__background-color;
-    color: $dark__text-color;
-    border-color: $dark__border-color;
-    outline: none;
-  }
-
   &:focus {
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, .6);
   }
@@ -1031,14 +1022,17 @@ td.col--budget:not(:empty)::after {
   textarea,
   .btn-create-ticket {
     border-radius: 5px;
-    background-color: $dark__primary-color;
-    color: $dark__text-color;
-    border: 1px solid $dark__border-color;
   }
 
   .btn-create-ticket {
-    @include hover {
+    background-color: $dark__primary-color;
+    border-color: $dark__border-color;
+    color: $dark__text-color;
+    height: 38px;
+
+    @include allPseudoClasses {
       background-color: $dark__hover__background-color;
+      color: $dark__text-color;
     }
   }
 
