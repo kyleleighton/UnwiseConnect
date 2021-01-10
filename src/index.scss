@@ -310,6 +310,7 @@ body {
   padding: 0 15px;
   border-radius: $element__border-radius;
   border: 1px solid #ccc;
+  background-color: transparent;
 }
 
 td.col--budget:not(:empty)::after {
