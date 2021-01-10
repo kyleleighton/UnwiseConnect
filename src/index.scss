@@ -533,7 +533,7 @@ td.col--budget:not(:empty)::after {
     }
   }
 
-  .open>.btn.dropdown-toggle,
+  .open > .btn.dropdown-toggle,
   .btn.dropdown-toggle:active,
   .btn.dropdown-toggle:hover,
   .btn.dropdown-toggle:focus {
@@ -542,6 +542,28 @@ td.col--budget:not(:empty)::after {
     text-decoration: $button__hover__text-decoration;
     border-color: $dark__border-color;
     transition: .3s;
+  }
+
+  .open > .toggl-description {
+    background-color: $dark__primary-color;
+    border: 1px solid $dark__border-color;
+
+    .form-control {
+      background-color: $dark__secondary-color;
+      color: $dark__text-color;
+    }
+
+    button {
+      margin-right: 5px;
+      border-radius: $element__border-radius;
+
+      @include hover {
+        border: 1px solid $dark__border-color;
+        background-color: $dark__hover__background-color;
+        color: $dark__text-color;
+        text-decoration: none;
+      }
+    }
   }
 
   .dropdown-menu {
@@ -756,7 +778,7 @@ td.col--budget:not(:empty)::after {
   }
 
   .glyphicon-info-sign {
-    @include hover {
+    @include allPseudoClasses {
       background-color: $dark__hover__background-color;
       color: $dark__text-color;
       border-color: $dark__border-color;
@@ -793,6 +815,7 @@ td.col--budget:not(:empty)::after {
   .btn-modal-nav {
     background-color: transparent;
     color: $dark__link-color !important;
+    border: none;
   }
 
   .table-striped > tbody > tr:nth-of-type(odd) {
