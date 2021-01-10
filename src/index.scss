@@ -444,7 +444,12 @@ td.col--budget:not(:empty)::after {
 
   input {
     border-radius: $element__border-radius;
-    height: 33px;
+    padding-left: 10px;
+  }
+
+  .column-filter-input,
+  .dispatch-fields .form-group:not(:first-of-type) input {
+    height: 38px;
   }
 
   .navbar-brand {
