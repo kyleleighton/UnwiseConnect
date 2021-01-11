@@ -9,12 +9,13 @@ import ToggleProjects from './ToggleProjects';
 import classnames from 'classnames';
 import sortBy from 'sort-by';
 import { connect } from 'react-redux';
-import { search } from '../../actions/tickets';
+import { search, updateSingleTicket } from '../../actions/tickets';
 
 class Tickets extends Component {
   state = {
     expanded: '',
-    selectedProject: {}
+    selectedProject: {},
+    newTickets: ''
   }
 
   componentDidUpdate = (prevProps) => {
@@ -66,6 +67,10 @@ class Tickets extends Component {
     }
 
     this.props.dispatch(search(nextQuery));
+  }
+
+  addNewTicket = payload => {
+    this.props.dispatch(updateSingleTicket(payload));
   }
 
   expand = (id) => {
@@ -128,6 +133,7 @@ class Tickets extends Component {
               projects={this.projects()}
               selectedProject={this.state.selectedProject}
               tickets={this.props.tickets.flattened}
+              addNewTicket={this.addNewTicket}
             />
             {this.props.tickets.flattened.length > 0 && (
               <Table

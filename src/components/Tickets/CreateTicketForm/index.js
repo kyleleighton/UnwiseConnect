@@ -128,7 +128,7 @@ class CreateTicketForm extends PureComponent {
         this.setState({
           newTicketId: res.result.id,
         });
-        fetchTicketById(res.result.id)
+        this.props.addNewTicket(res)
       });
     }
 

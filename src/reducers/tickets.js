@@ -10,6 +10,7 @@ const initialState = {
     inProgress: false,
     response: null,
   },
+  newTicket: {}
 };
 
 export default (state = initialState, action) => {
@@ -34,6 +35,20 @@ export default (state = initialState, action) => {
           ),
           ...action.payload.flattened,
         ],
+      };
+
+    case ActionTypes.SINGLE_TICKETS_UPDATE:
+      return {
+        ...state,
+        nested: {
+          ...state.nested,
+          // [action.payload.projectId]: action.payload.result
+        },
+        flattened: [
+          ...state.flattened,
+          action.payload.result
+        ],
+          newTicket: action.payload.result,
       };
 
     case ActionTypes.TICKETS_REMOVE:
