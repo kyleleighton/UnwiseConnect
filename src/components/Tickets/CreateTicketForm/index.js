@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import * as TicketsActions from '../../../actions/tickets';
 import { connect } from 'react-redux';
-import { createTicket } from '../../../helpers/cw';
+import { createTicket, fetchTicketById } from '../../../helpers/cw';
 import TicketModal from './TicketModal';
 import TicketForm from './TicketForm';
 import sortBy from 'sort-by';
@@ -127,7 +127,8 @@ class CreateTicketForm extends PureComponent {
       createTicket(projectTicketDetails).then(res => {
         this.setState({
           newTicketId: res.result.id,
-        }, this.updateTickets);
+        });
+        fetchTicketById(res.result.id)
       });
     }
 
@@ -152,9 +153,11 @@ class CreateTicketForm extends PureComponent {
   }
 
   updateTickets = () => {
-    this.props.dispatch(TicketsActions.updateTickets({
-      projectId: this.state.selectedProject[0].id
-    }));
+    if (this.state.newTicketId) {
+      fetchTicketById({
+        ticketId: this.state.newTicketId
+      })
+    }
   }
 
   setDescription = description => {
