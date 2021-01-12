@@ -38,8 +38,9 @@ class EditTicketForm extends PureComponent {
       budget: this.state.budget,
       description: this.state.description,
       // fullName: this.state.company.name + ' - ' + this.state.project.name,
-      // phaseValue: this.state.phase.name,
+      phaseValue: this.state.phaseValue,
       summary: this.state.summary,
+      phaseId: this.state.phases.filter(phase => phase.path === this.state.phaseValue && phase.id)
     })
   }
 
@@ -55,7 +56,10 @@ class EditTicketForm extends PureComponent {
 
     this.props.tickets.map(ticket => {
       if (ticketDetails.project.name === ticket.project.name && ticketDetails.company.name === ticket.company.name) {
-        phases.push({ path: ticket.phase.path });
+        phases.push({
+          path: ticket.phase.path,
+          id: ticket.phase.id,
+        });
       }
     });
 
