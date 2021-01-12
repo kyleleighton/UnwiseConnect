@@ -6,6 +6,7 @@ const TicketForm = (props) => {
   if (!props.ticketDetails) {
     return null;
   }
+
   return (
     <form>
       <button
@@ -84,24 +85,14 @@ const TicketForm = (props) => {
       <button
         type="button"
         className="btn btn-submit btn-primary"
-        disabled={!props.budget || !props.summary || !props.phaseValue || props.hasCompletedTicket}
+        disabled={!props.budget || !props.summary || !props.phaseValue}
         onClick={() => {
           props.setTicketCompleted(true);
-          // props.createNewTicket();
+          props.updateTicketDetails();
         }}
       >
-        Create Ticket
+        Update Ticket
       </button>
-      {(props.hasCompletedTicket && (
-
-        <button
-          type="button"
-          className="btn btn-default btn-md btn-create-ticket"
-          // onClick={() => props.resetTicketDetails()}
-        >
-          Update Ticket
-        </button>
-      ))}
     </form>
   );
 };

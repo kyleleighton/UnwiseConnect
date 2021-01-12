@@ -1,9 +1,7 @@
-import * as TicketsActions from '../../../actions/tickets';
 import React, { PureComponent } from 'react';
-import { connect } from 'react-redux';
 import { fetchTicketById, updateTicketDetails } from '../../../helpers/cw';
 import TicketForm from './EditForm';
-import sortBy from 'sort-by';
+import { getPhases } from '../helpers';
 
 class EditTicketForm extends PureComponent {
   state = {
@@ -16,11 +14,12 @@ class EditTicketForm extends PureComponent {
     summary: '',
     ticketDetails: '',
     ticketId: '',
-    ticketType: 'project',
   }
 
   getTicketDetails = () => {
     fetchTicketById(this.state.ticketId || 418151).then(res => {
+      const phases = getPhases(res, this.props.tickets)
+
       this.setState({
         budget: res.budgetHours,
         description: res.description,
@@ -28,16 +27,16 @@ class EditTicketForm extends PureComponent {
         phaseValue: res.phase.name,
         summary: res.summary,
         ticketDetails: res,
-      }, this.getPhases);
-    })
+        phases
+      });
+    });
   }
 
   updateTicketDetails = () => {
     updateTicketDetails({
-      ticketId: 418151,
+      ticketId: this.state.ticketId,
       budget: this.state.budget,
       description: this.state.description,
-      // fullName: this.state.company.name + ' - ' + this.state.project.name,
       phaseValue: this.state.phaseValue,
       summary: this.state.summary,
       phaseId: this.state.phases.filter(phase => phase.path === this.state.phaseValue && phase.id)
@@ -47,33 +46,6 @@ class EditTicketForm extends PureComponent {
   setTicketId = ticketId => {
     this.setState({
       ticketId
-    });
-  }
-
-  getPhases = () => {
-    let phases = [];
-    const { ticketDetails } = this.state;
-
-    this.props.tickets.map(ticket => {
-      if (ticketDetails.project.name === ticket.project.name && ticketDetails.company.name === ticket.company.name) {
-        phases.push({
-          path: ticket.phase.path,
-          id: ticket.phase.id,
-        });
-      }
-    });
-
-    const deduplicatedPhases = phases.reduce((uniquePhases, currentPhase) => {
-      if (!uniquePhases.some(phase => phase.path === currentPhase.path)) {
-        uniquePhases.push(currentPhase);
-      }
-      return uniquePhases;
-    }, []);
-
-    const sortedDeduplicatedPhases = deduplicatedPhases.sort(sortBy('path'));
-
-    this.setState({
-      phases: sortedDeduplicatedPhases
     });
   }
 
@@ -105,8 +77,6 @@ class EditTicketForm extends PureComponent {
     return (
       <div>
         <button type="button" onClick={this.getTicketDetails}>Edit Ticket</button>
-        <button type="button" onClick={this.updateTicketDetails}>Finish</button>
-
         <label htmlFor="ticket-number">Ticket Number</label>
         <input
           type="number"
@@ -133,6 +103,7 @@ class EditTicketForm extends PureComponent {
           setTicketCompleted={this.setTicketCompleted}
           summary={this.state.summary}
           ticketType={this.state.ticketType}
+          updateTicketDetails={this.updateTicketDetails}
           fullName={this.state.fullName}
         />
       </div>
