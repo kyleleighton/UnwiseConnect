@@ -7,15 +7,27 @@ import sortBy from 'sort-by';
 
 class EditTicketForm extends PureComponent {
   state = {
+    budget: '',
+    description: '',
+    fullName: '',
+    hasCompletedTicket: false,
+    phases: [],
+    phaseValue: '',
+    summary: '',
     ticketDetails: '',
     ticketId: '',
-    phases: []
+    ticketType: 'project',
   }
 
   getTicketDetails = () => {
-    fetchTicketById(403812 || this.state.ticketId).then(res => {
+    fetchTicketById(this.state.ticketId || 418097).then(res => {
       this.setState({
-        ticketDetails: res
+        budget: res.budgetHours,
+        description: res.description,
+        fullName: res.company.name + ' - ' + res.project.name,
+        phaseValue: res.phase.name,
+        summary: res.summary,
+        ticketDetails: res,
       }, this.getPhases);
     })
   }
@@ -32,11 +44,7 @@ class EditTicketForm extends PureComponent {
 
     this.props.tickets.map(ticket => {
       if (ticketDetails.project.name === ticket.project.name && ticketDetails.company.name === ticket.company.name) {
-        phases.push({
-          path: ticket.phase.path,
-          phaseId: ticket.phase.id,
-          ticketId: ticket.id
-        });
+        phases.push({ path: ticket.phase.path });
       }
     });
 
@@ -52,6 +60,30 @@ class EditTicketForm extends PureComponent {
     this.setState({
       phases: sortedDeduplicatedPhases
     });
+  }
+
+
+  setDescription = description => {
+    this.setState({ description });
+  }
+
+  setPhaseValue = phaseValue => {
+    this.setState({
+      phaseValue,
+      selectedPhase: this.state.phases.filter(phase => phase.path === phaseValue),
+    })
+  }
+  
+  setSummary = summary => {
+    this.setState({ summary });
+  }
+
+  setBudget = budget => {
+    this.setState({ budget });
+  }
+
+  setTicketCompleted = hasCompletedTicket => {
+    this.setState({ hasCompletedTicket });
   }
 
   render() {
@@ -71,6 +103,20 @@ class EditTicketForm extends PureComponent {
           ticketDetails={this.state.ticketDetails}
           ticketId={this.state.ticketId}
           phases={this.state.phases}
+          budget={this.state.budget}
+          description={this.state.description}
+          hasCompletedTicket={this.state.hasCompletedTicket}
+          phaseValue={this.state.phaseValue}
+          selectedPhase={this.state.selectedPhase}
+          selectedProject={this.props.selectedProject}
+          setBudget={this.setBudget}
+          setDescription={this.setDescription}
+          setPhaseValue={this.setPhaseValue}
+          setSummary={this.setSummary}
+          setTicketCompleted={this.setTicketCompleted}
+          summary={this.state.summary}
+          ticketType={this.state.ticketType}
+          fullName={this.state.fullName}
         />
       </div>
     )

@@ -21,7 +21,7 @@ const TicketForm = (props) => {
           id="projects"
           className="form-control"
           disabled="disabled"
-          value={props.ticketDetails.company.name + ' - ' + props.ticketDetails.project.name}
+          value={props.fullName}
         />
       </div>
       <div className="autocomplete-field">
@@ -36,10 +36,10 @@ const TicketForm = (props) => {
               {item.path}
             </div>
           )}
-          // value={props.phaseValue}
-          // inputProps={{ className: "autocomplete-input form-control" }}
-          // onChange={e => props.setPhaseValue(e.target.value)}
-          // onSelect={value => props.setPhaseValue(value)}
+          value={props.phaseValue}
+          inputProps={{ className: "autocomplete-input form-control" }}
+          onChange={e => props.setPhaseValue(e.target.value)}
+          onSelect={value => props.setPhaseValue(value)}
         />
       </div>
       <div>
@@ -48,9 +48,9 @@ const TicketForm = (props) => {
           className="form-control"
           type="text"
           id="summary"
-          // onChange={(e) => props.setSummary(e.target.value)}
+          onChange={(e) => props.setSummary(e.target.value)}
           required
-          value={props.ticketDetails.summary}
+          value={props.summary}
           autoComplete="off"
         ></input>
       </div>
@@ -60,12 +60,12 @@ const TicketForm = (props) => {
           type="number"
           id="budget-hours"
           className="form-control"
-          // onChange={(e) => props.setBudget(e.target.value)}
+          onChange={(e) => props.setBudget(e.target.value)}
           required
           min="0"
           step="0.25"
           autoComplete="off"
-          value={props.ticketDetails.budgetHours}
+          value={props.budget}
         ></input>
       </div>
       <div>
@@ -77,41 +77,31 @@ const TicketForm = (props) => {
           className="form-control"
           placeholder="This is optional"
           autoComplete="off"
-          value={props.ticketDetails}
-          // onChange={(e) => props.setDescription(e.target.value)}
+          value={props.description}
+          onChange={(e) => props.setDescription(e.target.value)}
         ></textarea>
       </div>
       <button
         type="button"
         className="btn btn-submit btn-primary"
-        // disabled={!props.budget || !props.summary || !props.phaseValue || props.hasCompletedTicket}
-        // onClick={() => {
-        //   props.setTicketCompleted(true);
-        //   props.createNewTicket();
-        // }}
+        disabled={!props.budget || !props.summary || !props.phaseValue || props.hasCompletedTicket}
+        onClick={() => {
+          props.setTicketCompleted(true);
+          // props.createNewTicket();
+        }}
       >
         Create Ticket
       </button>
-      {/* {(props.hasCompletedTicket && (
-        <>
-          <div className="new-ticket-message">
-            {props.newTicketId ? (
-              <p>Created ticket:
-                <TicketLink ticketNumber={props.newTicketId}/>
-              </p>
-            ) : (
-              <p>Creating ticket ...</p>
-            )}
-          </div>
-          <button
-            type="button"
-            className="btn btn-default btn-md btn-create-ticket"
-            onClick={() => props.resetTicketDetails()}
-          >
-            Create another ticket
-          </button>
-        </>
-      ))} */}
+      {(props.hasCompletedTicket && (
+
+        <button
+          type="button"
+          className="btn btn-default btn-md btn-create-ticket"
+          // onClick={() => props.resetTicketDetails()}
+        >
+          Update Ticket
+        </button>
+      ))}
     </form>
   );
 };
