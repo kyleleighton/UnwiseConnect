@@ -37,7 +37,7 @@ class EditTicketForm extends PureComponent {
 
   updateTicketDetails = () => {
     updateTicketDetails({
-      ticketId: this.state.ticketId,
+      ticketId: this.state.ticketId || 418151,
       budget: this.state.budget,
       description: this.state.description,
       phaseValue: this.state.phaseValue,
