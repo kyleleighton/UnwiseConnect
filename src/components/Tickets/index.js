@@ -10,6 +10,7 @@ import classnames from 'classnames';
 import sortBy from 'sort-by';
 import { connect } from 'react-redux';
 import { search } from '../../actions/tickets';
+import EditTicketForm from './EditTicketForm';
 
 class Tickets extends Component {
   state = {
@@ -128,6 +129,7 @@ class Tickets extends Component {
                 }, true)}
               />
             </div>
+            <EditTicketForm />
             <CreateTicketForm
               addNewTicketToColumns={this.addNewTicketToColumns}
               projects={this.projects()}
