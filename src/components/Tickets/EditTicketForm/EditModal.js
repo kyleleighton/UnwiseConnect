@@ -8,7 +8,7 @@ class EditModal extends PureComponent {
       <Modal
         contentLabel="Create Ticket Modal"
         isOpen={this.props.expanded}
-        onRequestClose={this.props.toggleTicketModal}
+        onRequestClose={this.props.toggleEditModal}
         overlayClassName={`modal-overlay ticket-modal ${this.props.theme}-modal`}
         shouldCloseOnOverlayClick={true}
       >

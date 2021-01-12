@@ -52,12 +52,11 @@ class EditTicketForm extends PureComponent {
     });
   }
 
-  toggleTicketModal = () => {
+  toggleEditModal = () => {
     this.setState({
       expanded: !this.state.expanded
     });
   }
-
 
   setDescription = description => {
     this.setState({
@@ -92,41 +91,38 @@ class EditTicketForm extends PureComponent {
 
   render() {
     return (
-      <div>
+      <div className="edit-ticket-form">
         <button type="button" onClick={this.getTicketDetails}>Edit Ticket</button>
-        <label htmlFor="ticket-number">Ticket Number</label>
-        <input
-          type="number"
-          id="ticket-number"
-          className="form-control"
-          onChange={(e) => this.setTicketId(e.target.value)}
-          min="6"
-          value={this.state.ticketId}
-        ></input>
+        <div className="edit-ticket-input">
+          <label htmlFor="ticket-number">Ticket Number</label>
+          <input
+            className="form-control"
+            id="ticket-number"
+            onChange={(e) => this.setTicketId(e.target.value)}
+            min="6"
+            max="6"
+            type="number"
+            value={this.state.ticketId}
+          ></input>
+        </div>
         <EditModal
-          contentLabel="Create Ticket Modal"
+          contentLabel="Edit Ticket Modal"
           expanded={this.state.expanded}
-          toggleTicketModal={this.toggleTicketModal}
+          toggleEditModal={this.toggleEditModal}
         >
           <TicketForm
-            ticketDetails={this.state.ticketDetails}
-            ticketId={this.state.ticketId}
-            phases={this.state.phases}
             budget={this.state.budget}
             description={this.state.description}
-            hasCompletedTicket={this.state.hasCompletedTicket}
+            fullName={this.state.fullName}
+            phases={this.state.phases}
             phaseValue={this.state.phaseValue}
-            selectedPhase={this.state.selectedPhase}
-            selectedProject={this.props.selectedProject}
             setBudget={this.setBudget}
             setDescription={this.setDescription}
             setPhaseValue={this.setPhaseValue}
             setSummary={this.setSummary}
-            setTicketCompleted={this.setTicketCompleted}
             summary={this.state.summary}
-            ticketType={this.state.ticketType}
+            ticketDetails={this.state.ticketDetails}
             updateTicketDetails={this.updateTicketDetails}
-            fullName={this.state.fullName}
           />
         </EditModal>
       </div>

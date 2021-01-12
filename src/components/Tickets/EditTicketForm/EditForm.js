@@ -87,7 +87,6 @@ const TicketForm = (props) => {
         className="btn btn-submit btn-primary"
         disabled={!props.budget || !props.summary || !props.phaseValue}
         onClick={() => {
-          props.setTicketCompleted(true);
           props.updateTicketDetails();
         }}
       >
