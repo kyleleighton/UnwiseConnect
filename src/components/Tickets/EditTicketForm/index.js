@@ -1,7 +1,7 @@
 import * as TicketsActions from '../../../actions/tickets';
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
-import { fetchTicketById } from '../../../helpers/cw';
+import { fetchTicketById, updateTicketDetails } from '../../../helpers/cw';
 import TicketForm from './EditForm';
 import sortBy from 'sort-by';
 
@@ -20,7 +20,8 @@ class EditTicketForm extends PureComponent {
   }
 
   getTicketDetails = () => {
-    fetchTicketById(this.state.ticketId || 418097).then(res => {
+    fetchTicketById(this.state.ticketId || 418151).then(res => {
+
       this.setState({
         budget: res.budgetHours,
         description: res.description,
@@ -29,6 +30,16 @@ class EditTicketForm extends PureComponent {
         summary: res.summary,
         ticketDetails: res,
       }, this.getPhases);
+
+      updateTicketDetails({
+        ticketId: 418151,
+        budget: res.budgetHours,
+        description: res.description,
+        fullName: res.company.name + ' - ' + res.project.name,
+        phaseValue: res.phase.name,
+        summary: res.summary,
+        ticketDetails: res,        
+      })
     })
   }
 
