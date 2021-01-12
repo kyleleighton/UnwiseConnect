@@ -1,6 +1,5 @@
 import React from 'react';
 import Autocomplete from 'react-autocomplete';
-import TicketLink from '../TicketLink';
 
 const TicketForm = (props) => {
   if (!props.ticketDetails) {
@@ -13,23 +12,17 @@ const TicketForm = (props) => {
         type="button"
         className="close-btn btn"
         aria-label="close"
+        onClick={() => props.toggleEditModal()}
       >
         ✕
       </button>
-      <div>
-        <label htmlFor="projects">Project</label>
-        <input
-          id="projects"
-          className="form-control"
-          disabled="disabled"
-          value={props.fullName}
-        />
-      </div>
+      <h3>Project: <strong>{props.fullName}</strong></h3>
       <div className="autocomplete-field">
         <label htmlFor="phases">Phase</label>
         <Autocomplete
           id="phases"
           items={props.phases}
+          inputProps={{ className: "autocomplete-input form-control" }}
           getItemValue={item => item.path}
           shouldItemRender={(item, value) => item.path && item.path.toLowerCase().indexOf(value.toLowerCase()) > -1}
           renderItem={item => (
@@ -38,7 +31,6 @@ const TicketForm = (props) => {
             </div>
           )}
           value={props.phaseValue}
-          inputProps={{ className: "autocomplete-input form-control" }}
           onChange={e => props.setPhaseValue(e.target.value)}
           onSelect={value => props.setPhaseValue(value)}
         />
@@ -46,41 +38,39 @@ const TicketForm = (props) => {
       <div>
         <label htmlFor="summary">Summary</label>
         <input
+          autoComplete="off"
           className="form-control"
-          type="text"
           id="summary"
           onChange={(e) => props.setSummary(e.target.value)}
-          required
+          type="text"
           value={props.summary}
-          autoComplete="off"
         ></input>
       </div>
       <div>
         <label htmlFor="budget-hours">Budget Hours</label>
         <input
-          type="number"
-          id="budget-hours"
+          autoComplete="off"
           className="form-control"
+          id="budget-hours"
           onChange={(e) => props.setBudget(e.target.value)}
-          required
           min="0"
           step="0.25"
-          autoComplete="off"
+          type="number"
           value={props.budget}
         ></input>
       </div>
       <div>
         <label htmlFor="description">Description</label>
         <textarea
-          id="description"
-          rows="4"
-          cols="50"
-          className="form-control"
-          placeholder="This is optional"
           autoComplete="off"
-          value={props.description}
+          className="form-control"
+          cols="50"
+          id="description"
           onChange={(e) => props.setDescription(e.target.value)}
-        ></textarea>
+          placeholder="This is optional"
+          rows="4"
+          value={props.description}
+        />
       </div>
       <button
         type="button"

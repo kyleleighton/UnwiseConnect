@@ -1,8 +1,8 @@
 import React, { PureComponent } from 'react';
 import { fetchTicketById, updateTicketDetails } from '../../../helpers/cw';
-import TicketForm from './EditForm';
 import { getPhases } from '../helpers';
 import EditModal from './EditModal';
+import TicketForm from './EditForm';
 
 class EditTicketForm extends PureComponent {
   state = {
@@ -92,18 +92,18 @@ class EditTicketForm extends PureComponent {
   render() {
     return (
       <div className="edit-ticket-form">
-        <button type="button" onClick={this.getTicketDetails}>Edit Ticket</button>
-        <div className="edit-ticket-input">
-          <label htmlFor="ticket-number">Ticket Number</label>
-          <input
-            className="form-control"
-            id="ticket-number"
-            onChange={(e) => this.setTicketId(e.target.value)}
-            min="6"
-            max="6"
-            type="number"
-            value={this.state.ticketId}
-          ></input>
+        <div className="edit-ticket-form-actions">
+          <button type="button" onClick={this.getTicketDetails}>Edit Ticket</button>
+          <div className="edit-ticket-input">
+            <label htmlFor="ticket-number">Ticket Number</label>
+            <input
+              className="form-control"
+              id="ticket-number"
+              onChange={(e) => this.setTicketId(e.target.value)}
+              type="number"
+              value={this.state.ticketId}
+            ></input>
+          </div>
         </div>
         <EditModal
           contentLabel="Edit Ticket Modal"
@@ -122,6 +122,7 @@ class EditTicketForm extends PureComponent {
             setSummary={this.setSummary}
             summary={this.state.summary}
             ticketDetails={this.state.ticketDetails}
+            toggleEditModal={this.toggleEditModal}
             updateTicketDetails={this.updateTicketDetails}
           />
         </EditModal>
