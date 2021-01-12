@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import { fetchTicketById, updateTicketDetails } from '../../../helpers/cw';
 import TicketForm from './EditForm';
 import { getPhases } from '../helpers';
+import EditModal from './EditModal';
 
 class EditTicketForm extends PureComponent {
   state = {
@@ -14,6 +15,7 @@ class EditTicketForm extends PureComponent {
     summary: '',
     ticketDetails: '',
     ticketId: '',
+    expanded: false
   }
 
   getTicketDetails = () => {
@@ -27,7 +29,8 @@ class EditTicketForm extends PureComponent {
         phaseValue: res.phase.name,
         summary: res.summary,
         ticketDetails: res,
-        phases
+        phases,
+        expanded: true
       });
     });
   }
@@ -49,9 +52,17 @@ class EditTicketForm extends PureComponent {
     });
   }
 
+  toggleTicketModal = () => {
+    this.setState({
+      expanded: !this.state.expanded
+    });
+  }
+
 
   setDescription = description => {
-    this.setState({ description });
+    this.setState({
+      description
+    });
   }
 
   setPhaseValue = phaseValue => {
@@ -62,15 +73,21 @@ class EditTicketForm extends PureComponent {
   }
   
   setSummary = summary => {
-    this.setState({ summary });
+    this.setState({
+      summary
+    });
   }
 
   setBudget = budget => {
-    this.setState({ budget });
+    this.setState({
+      budget
+    });
   }
 
   setTicketCompleted = hasCompletedTicket => {
-    this.setState({ hasCompletedTicket });
+    this.setState({
+      hasCompletedTicket
+    });
   }
 
   render() {
@@ -86,26 +103,32 @@ class EditTicketForm extends PureComponent {
           min="6"
           value={this.state.ticketId}
         ></input>
-        <TicketForm
-          ticketDetails={this.state.ticketDetails}
-          ticketId={this.state.ticketId}
-          phases={this.state.phases}
-          budget={this.state.budget}
-          description={this.state.description}
-          hasCompletedTicket={this.state.hasCompletedTicket}
-          phaseValue={this.state.phaseValue}
-          selectedPhase={this.state.selectedPhase}
-          selectedProject={this.props.selectedProject}
-          setBudget={this.setBudget}
-          setDescription={this.setDescription}
-          setPhaseValue={this.setPhaseValue}
-          setSummary={this.setSummary}
-          setTicketCompleted={this.setTicketCompleted}
-          summary={this.state.summary}
-          ticketType={this.state.ticketType}
-          updateTicketDetails={this.updateTicketDetails}
-          fullName={this.state.fullName}
-        />
+        <EditModal
+          contentLabel="Create Ticket Modal"
+          expanded={this.state.expanded}
+          toggleTicketModal={this.toggleTicketModal}
+        >
+          <TicketForm
+            ticketDetails={this.state.ticketDetails}
+            ticketId={this.state.ticketId}
+            phases={this.state.phases}
+            budget={this.state.budget}
+            description={this.state.description}
+            hasCompletedTicket={this.state.hasCompletedTicket}
+            phaseValue={this.state.phaseValue}
+            selectedPhase={this.state.selectedPhase}
+            selectedProject={this.props.selectedProject}
+            setBudget={this.setBudget}
+            setDescription={this.setDescription}
+            setPhaseValue={this.setPhaseValue}
+            setSummary={this.setSummary}
+            setTicketCompleted={this.setTicketCompleted}
+            summary={this.state.summary}
+            ticketType={this.state.ticketType}
+            updateTicketDetails={this.updateTicketDetails}
+            fullName={this.state.fullName}
+          />
+        </EditModal>
       </div>
     )
   }
