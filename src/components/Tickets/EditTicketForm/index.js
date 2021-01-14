@@ -1,6 +1,7 @@
+import * as TicketsActions from '../../../actions/tickets';
 import { connect } from 'react-redux';
 import React, { PureComponent } from 'react';
-import { fetchTicketById, updateTicketDetails, fetchTicketNotes } from '../../../helpers/cw';
+import { fetchTicketById, updateTicketDetails, fetchTicketNotes, updateTicketNotes } from '../../../helpers/cw';
 import { getPhases } from '../helpers';
 import { editIcon } from '../../../helpers/svgs';
 import EditForm from './EditForm';
@@ -20,6 +21,8 @@ class EditTicketForm extends PureComponent {
     summary: '',
     ticketDetails: '',
     updatingTicket: false,
+    note: '',
+    noteId: ''
   }
 
   getTicketDetails = () => {
@@ -48,6 +51,7 @@ class EditTicketForm extends PureComponent {
       updatingTicket: true,
     });
 
+    updateTicketNotes(this.props.ticketNumber, this.state.noteId, 'hello');
     this.setTicketCompleted();
     updateTicketDetails({
       ticketId: this.props.ticketNumber,
@@ -55,7 +59,8 @@ class EditTicketForm extends PureComponent {
       initialDescription: this.state.description,
       phase: this.state.hasChangedPhase ? this.state.selectedPhase : this.state.phases.filter(phase => phase.id === this.state.ticketDetails.phase.id),
       summary: this.state.summary,
-    }).then(() => {
+    }).then((res) => {
+
       this.setState({
         updatingTicket: false,
       });
@@ -71,7 +76,9 @@ class EditTicketForm extends PureComponent {
       }
 
       this.setState({
-        description: results[0].text
+        description: results[0].text,
+        note: results[0].text,
+        noteId: results[0].id,
       });
     }).catch((e) => {
       console.log(e);

@@ -77,6 +77,14 @@ export const updateTicketDetails = params => {
   }).then(checkStatus).then(parseJSON);
 };
 
+export const updateTicketNotes = (ticketId, noteId, note) => {
+  return fetch(`${process.env.REACT_APP_API_URL}/v1/ticket/${ticketId}/notes/${noteId}`, {
+    headers,
+    method: 'PATCH',
+    body: JSON.stringify(note),
+  }).then(checkStatus).then(parseJSON);  
+}
+
 export const createTicket = params => {
   return fetch(`${process.env.REACT_APP_API_URL}/v1/ticket`, {
     headers,
