@@ -41,7 +41,7 @@ class DetailsModal extends Component {
         <Modal
           contentLabel="Notes Modal"
           isOpen={this.state.expanded}
-          overlayClassName={`modal-overlay ${this.props.theme}-modal`}
+          overlayClassName={`modal-overlay ${this.props.theme}-modal ticket-info-modal`}
           onRequestClose={this.expand}
           shouldCloseOnOverlayClick={true}
         >
