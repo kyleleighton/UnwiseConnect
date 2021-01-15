@@ -25,6 +25,13 @@ class EditTicketForm extends PureComponent {
     noteId: ''
   }
 
+  // componentDidMount = () => {
+  //   this.setState({
+  //     hasCompletedTicket: false,
+  //   });
+  // }
+  
+
   getTicketDetails = () => {
     fetchTicketById(this.props.ticketNumber).then(res => {
       const phases = getPhases(res, this.props.tickets)

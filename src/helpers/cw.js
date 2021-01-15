@@ -80,7 +80,7 @@ export const updateTicketDetails = params => {
 export const updateTicketNotes = (ticketId, noteId, note) => {
   return fetch(`${process.env.REACT_APP_API_URL}/v1/ticket/${ticketId}/notes/${noteId}`, {
     headers,
-    method: 'PATCH',
+    method: 'PUT',
     body: JSON.stringify(note),
   }).then(checkStatus).then(parseJSON);  
 }
