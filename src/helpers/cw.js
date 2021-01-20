@@ -25,6 +25,20 @@ export const fetchTicketById = ticketId => {
   return fetch(`${process.env.REACT_APP_API_URL}/v1/ticket/${ticketId}`, { headers }).then(checkStatus).then(parseJSON);  
 }
 
+export const fetchDispatchItems = (memberId, startDate, endDate) => {
+  const headers = {
+    Authorization: `Basic ${process.env.REACT_APP_API_KEY}`,
+  };
+  return fetch(`${process.env.REACT_APP_API_URL}/v1/schedule/entries/${memberId}?startDate=${startDate}&endDate=${endDate}`, { headers }).then(checkStatus).then(parseJSON);
+}
+
+export const fetchMembers = (memberId) => {
+  const headers = {
+    Authorization: `Basic ${process.env.REACT_APP_API_KEY}`,
+  };
+  return fetch(`${process.env.REACT_APP_API_URL}/v1/system/members`, { headers }).then(checkStatus).then(parseJSON);
+}
+
 export const fetchTicketScheduleEntryIds = ticketId => {
   const headers = {
     Authorization: `Basic ${process.env.REACT_APP_API_KEY}`,
