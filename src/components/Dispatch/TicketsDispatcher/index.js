@@ -15,7 +15,6 @@ import { format as formatDate } from 'date-fns';
 import { multiInfix } from '../../../helpers/utils';
 import { search, dispatch as dispatchTickets } from '../../../actions/tickets';
 import Summary from '../../shared/Summary';
-import ToggleProjects from '../../Tickets/ToggleProjects';
 
 const fields = [
   {
@@ -499,12 +498,6 @@ class TicketsDispatcher extends Component {
     return (
       <div>
         <div className="panel-uc panel panel-default">
-          <div className="panel-uc__heading panel-heading clearfix">
-            <h4>Dispatch Center</h4>
-            <div className="dispatch-ticket-update">
-              <ToggleProjects />
-            </div>
-          </div>
           <div className="panel-body">
             <header className="dispatch-header">
               <form>
