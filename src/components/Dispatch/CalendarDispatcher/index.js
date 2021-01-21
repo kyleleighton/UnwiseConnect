@@ -7,6 +7,7 @@ import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
 import 'react-big-calendar/lib/sass/styles.scss';
 import 'react-big-calendar/lib/addons/dragAndDrop/styles.scss';
 import { connect } from 'react-redux';
+import Sidebar from './Sidebar';
 
 const DragAndDropCalendar = withDragAndDrop(Calendar);
 
@@ -15,7 +16,8 @@ class CalendarDispatcher extends PureComponent {
     events: events,
     displayDragItemInCell: true,
     dispatchItems: '',
-    members: []
+    members: [],
+    memberNames: []
   }
 
   handleDragStart = event => {
@@ -195,7 +197,8 @@ class CalendarDispatcher extends PureComponent {
             name: member.name,
             tickets: res.name
           }
-        }
+        },
+        memberNames: [...this.state.memberNames, member.name]
       });
     }).catch(e => {
       console.log(e)
@@ -208,6 +211,7 @@ class CalendarDispatcher extends PureComponent {
     return (
       <>
         <button type="button" onClick={() => this.getMembers()}>Get Members</button>
+        <Sidebar memberNames={this.state.memberNames} />
         <DragAndDropCalendar
           selectable
           localizer = {localizer}
