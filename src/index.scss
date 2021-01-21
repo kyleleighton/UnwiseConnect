@@ -1134,3 +1134,47 @@ button.dark.btn.btn-dark-mode {
   position: absolute;
   right: 15px;
 }
+
+.dark {
+  .rbc-calendar {
+    background-color: $dark__hover__background-color;
+
+    .rbc-time-slot,
+    .rbc-today {
+      border-top: none;
+    }
+
+    .rbc-addons-dnd-row-body {
+      display: none;
+    }
+
+    .rbc-event {
+      background-color: darken($dark__link-color, 10);
+
+      * {
+        color: $dark__text-color;
+      }
+    }
+
+    * {
+      border-color: $dark__border-color;
+    }
+
+    .rbc-header + .rbc-header,
+    .rbc-day-bg + .rbc-day-bg {
+      border-left: 1px solid $dark__border-color;
+    }
+
+
+    .rbc-day-slot.rbc-today,
+    .rbc-header.rbc-today,
+    .rbc-day-bg.rbc-today,
+    .rbc-today .rbc-timeslot-group {
+      background-color: $dark__primary-color;
+    }
+
+    .rbc-time-gutter .rbc-time-slot {
+      border: none !important;
+    }
+  }
+}

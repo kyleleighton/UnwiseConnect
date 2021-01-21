@@ -95,18 +95,18 @@ class CalendarDispatcher extends PureComponent {
   }
 
   newEvent(event) {
-    let idList = this.state.events.map(a => a.id)
-    let newId = Math.max(...idList) + 1
-    let hour = {
-      id: newId,
-      title: 'New Event',
-      allDay: event.slots.length == 1,
-      start: event.start,
-      end: event.end,
-    }
-    this.setState({
-      events: this.state.events.concat([hour]),
-    })
+    // let idList = this.state.events.map(a => a.id)
+    // let newId = Math.max(...idList) + 1
+    // let hour = {
+    //   id: newId,
+    //   title: 'New Event',
+    //   allDay: event.slots.length == 1,
+    //   start: event.start,
+    //   end: event.end,
+    // }
+    // this.setState({
+    //   events: this.state.events.concat([hour]),
+    // })
   }
 
   getMonday = (d) => {
@@ -138,6 +138,46 @@ class CalendarDispatcher extends PureComponent {
 
     return members;
   }
+
+  mapEvents = (scheduleEntries, selectedResource) => {
+    let mapped = scheduleEntries
+      .filter (e => e.type.id !== 1 || (e.type.id === 1 && !e.name.includes('Meeting-Free Day')))
+      .filter(e => e.member.identifier.toLowerCase() === selectedResource.id.toLowerCase()).map(e => {
+        let parts = e.name.split('/', 4);
+        let title = parts[parts.length - 1].trim();
+        let durationEditable = e.type.id !== 1 && e.type.id !== 2;
+
+        if (e.type.id === 1) {
+          title = title.replace('Meeting: ', '');
+        }
+
+        let end = new Date(e.dateEnd);
+        let start = new Date(e.dateStart);
+
+        if (e.dateStart === e.dateEnd) {
+          start.setHours(selectedResource.start);
+          end.setHours(selectedResource.start);
+          end.addHours(e.hours);
+        }
+
+        let event = {
+          id: e.id,
+          resourceId: selectedResource.id,
+          start,
+          end,
+          originalStart: start,
+          originalEnd: end,
+          originalHours: e.hours,
+          hours: e.hours ?  e.hours : ((end.getTime() - start.getTime()) / (1000 * 3600)),
+          title,
+          resizable: durationEditable,
+          connectWiseEvent: e
+        };
+      return event;
+    });
+    return mapped;
+};
+
 
   getScheduleEntries = async (member) => {
     let startDate = this.getMonday(moment().toDate())
