@@ -176,7 +176,8 @@ class CalendarDispatcher extends PureComponent {
           onEventResize={this.resizeEvent}
           onSelectSlot={this.newEvent}
           onDragStart={console.log}
-          defaultView={Views.WEEK}
+          defaultView={Views.WORK_WEEK}
+          views={[Views.DAY, Views.WORK_WEEK, Views.AGENDA]}
           defaultDate={new Date(Date.now())}
           popup={true}
           dragFromOutsideItem={this.state.displayDragItemInCell ? this.dragFromOutsideItem : null}
