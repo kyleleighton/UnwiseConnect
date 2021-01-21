@@ -219,6 +219,8 @@ class CalendarDispatcher extends PureComponent {
           defaultView={Views.WORK_WEEK}
           views={[Views.DAY, Views.WORK_WEEK, Views.AGENDA]}
           defaultDate={new Date(Date.now())}
+          min={new Date(0, 0, 0, 5, 0, 0)}
+          max={new Date(0, 0, 0, 20, 0, 0)}
           popup={true}
           dragFromOutsideItem={this.state.displayDragItemInCell ? this.dragFromOutsideItem : null}
           onDropFromOutside={this.onDropFromOutside}

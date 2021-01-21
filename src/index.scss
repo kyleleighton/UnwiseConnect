@@ -1144,12 +1144,8 @@ button.dark.btn.btn-dark-mode {
       border-top: none;
     }
 
-    .rbc-addons-dnd-row-body {
-      display: none;
-    }
-
     .rbc-event {
-      background-color: darken($dark__link-color, 10);
+      background-color: darken($dark__link-color, 30%);
 
       * {
         color: $dark__text-color;
@@ -1165,7 +1161,6 @@ button.dark.btn.btn-dark-mode {
       border-left: 1px solid $dark__border-color;
     }
 
-
     .rbc-day-slot.rbc-today,
     .rbc-header.rbc-today,
     .rbc-day-bg.rbc-today,
@@ -1175,6 +1170,16 @@ button.dark.btn.btn-dark-mode {
 
     .rbc-time-gutter .rbc-time-slot {
       border: none !important;
+    }
+
+    .rbc-header.rbc-today a::after {
+      content: '(Today)';
+      margin-left: 10px;
+    }
+
+    .rbc-current-time-indicator {
+      height: 2px;
+      background-color: $dark__text-color;
     }
   }
 }
