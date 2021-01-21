@@ -13,6 +13,7 @@ import { compose } from 'redux';
 import { customField } from '../../config/columns';
 import { multiInfix } from '../../helpers/utils';
 import Summary from "../shared/Summary";
+import EditTicketForm from '../Tickets/EditTicketForm'
 
 function paginate({ page, perPage }) {
   return (rows = []) => {
@@ -35,30 +36,44 @@ function difference(arr1, arr2) {
 }
 
 export default class TicketsTable extends React.Component {
-  constructor(props) {
-    super(props);
+  state = {
+    searchColumn: 'all',
+    pagination: {
+      page: 1,
+      perPage: 20,
+    },
+    rows: [],
+    columns: this.props.columns,
+    showEmptyColumnsAlert: false,
+  };
 
-    this.state = {
-      searchColumn: 'all',
-      pagination: {
-        page: 1,
-        perPage: 20,
-      },
-      rows: [],
-      columns: props.columns,
-    };
-
-    this.changePage = this.changePage.bind(this);
-    this.search = this.search.bind(this);
-    this.toggleColumn = this.toggleColumn.bind(this);
-    this.getHtmlId = this.getHtmlId.bind(this);
-  }
-
-  componentDidMount() {
+  componentDidMount = () => {
     this.prepareRows();
+
+    setTimeout(() => {
+      if (!this.props.userColumns.length) {
+        this.setState({
+          showEmptyColumnsAlert: true
+        });
+      }
+    }, 1000);
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentDidUpdate(prevProps) {
+    if (prevProps.userColumns.length && !this.props.userColumns.length) {
+      this.setState({
+        showEmptyColumnsAlert: true
+      });
+    }
+
+    if (!prevProps.userColumns.length && this.props.userColumns.length) {
+      this.setState({
+        showEmptyColumnsAlert: false
+      });
+    }
+  }
+
+  componentWillReceiveProps = (nextProps) => {
     // Using a string compare to reduce re-rendering.
     let selectedChanged = (this.props.selectedTicketIds || []).join(',') !== (nextProps.selectedTicketIds || []).join(',');
     if (selectedChanged) {
@@ -77,7 +92,7 @@ export default class TicketsTable extends React.Component {
     }
   }
 
-  prepareRows(tickets = this.props.tickets) {
+  prepareRows = (tickets = this.props.tickets) => {
     const { columns } = this.state;
 
     this.setState({
@@ -91,7 +106,7 @@ export default class TicketsTable extends React.Component {
     });
   }
 
-  changePage(page) {
+  changePage = (page) => {
     this.setState({
       pagination: {
         ...this.state.pagination,
@@ -100,16 +115,16 @@ export default class TicketsTable extends React.Component {
     });
   }
 
-  search(query) {
+  search = (query) => {
     this.props.search(query);
   }
 
-  toggleColumn({ column }) {
+  toggleColumn = ({ column }) => {
     const columnName = column.property;
     this.props.toggleColumn({ columnName });
   }
 
-  onBodyRow(row) {
+  onBodyRow = (row) => {
     const actualHours = row.actualHours;
     const budgetHours = row.budgetHours;
     let rowClass = null;
@@ -131,7 +146,7 @@ export default class TicketsTable extends React.Component {
     };
   }
 
-  footerSum(rows, property) {
+  footerSum = (rows, property) => {
     let sum = 0;
 
     sum = rows.map(row => row[property]).reduce((a, b) => {
@@ -145,7 +160,7 @@ export default class TicketsTable extends React.Component {
     return Math.round(sum * 100) / 100;
   }
 
-  getHtmlId() {
+  getHtmlId = () => {
     let htmlId = this.props.id || this.state.htmlId;
     if (!htmlId) {
       htmlId = 'table-' + Math.random().toString(36).substr(2, 9);
@@ -266,7 +281,6 @@ TicketsTable.defaultProps = {
             return (
               <div>
                 <TicketLink ticketNumber={value} />
-                <DetailsModal ticketNumber={value} />
               </div>
             );
           }
@@ -277,30 +291,6 @@ TicketsTable.defaultProps = {
           width: 115,
         },
       },
-    },
-    {
-      // Using a random property because it's easier than adding a new one
-      // to all the rows
-      property: 'mobileGuid',
-      header: {
-        label: 'Toggl',
-      },
-      cell: {
-        resolve: value => `(${value})`,
-        formatters: [
-          (value, { rowData }) => {
-            return (
-              <StartTimer ticket={rowData} />
-            );
-          }
-        ]
-      },
-      props: {
-        style: {
-          width: 60,
-        },
-      },
-      filterType: 'none',
     },
     {
       property: 'phase.path',
@@ -435,6 +425,31 @@ TicketsTable.defaultProps = {
       header: {
         label: 'Assigned',
       },
+    },
+    {
+      property: 'mobileGuid',
+      header: {
+        label: 'Actions',
+      },
+      cell: {
+        formatters: [
+          (value, { rowData }) => {
+            return (
+              <div className="column-actions">
+                <StartTimer ticket={rowData} />
+                <DetailsModal ticketNumber={rowData.id} />
+                <EditTicketForm ticketNumber={rowData.id} />
+              </div>
+            );
+          }
+        ]
+      },
+      props: {
+        style: {
+          width: 120,
+        },
+      },
+      filterType: 'none',
     },
   ],
 };

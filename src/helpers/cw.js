@@ -18,6 +18,13 @@ export const fetchTicketNotes = ticketId => {
   return fetch(`${process.env.REACT_APP_API_URL}/v1/ticket/${ticketId}/notes`, { headers }).then(checkStatus).then(parseJSON);  
 }
 
+export const fetchTicketById = ticketId => {
+  const headers = {
+    Authorization: `Basic ${process.env.REACT_APP_API_KEY}`,
+  };
+  return fetch(`${process.env.REACT_APP_API_URL}/v1/ticket/${ticketId}`, { headers }).then(checkStatus).then(parseJSON);  
+}
+
 export const fetchTicketScheduleEntryIds = ticketId => {
   const headers = {
     Authorization: `Basic ${process.env.REACT_APP_API_KEY}`,
@@ -56,6 +63,22 @@ export const dispatchTickets = params => {
 
 export const updateTicketStatus = params => {
   return fetch(`${process.env.REACT_APP_API_URL}/v1/ticketStatus`, {
+    headers,
+    method: 'POST',
+    body: JSON.stringify(params),
+  }).then(checkStatus).then(parseJSON);
+};
+
+export const updateTicketDetails = params => {
+  return fetch(`${process.env.REACT_APP_API_URL}/v1/ticket/${params.ticketId}`, {
+    headers,
+    method: 'PATCH',
+    body: JSON.stringify(params),
+  }).then(checkStatus).then(parseJSON);
+};
+
+export const createTicket = params => {
+  return fetch(`${process.env.REACT_APP_API_URL}/v1/ticket`, {
     headers,
     method: 'POST',
     body: JSON.stringify(params),

@@ -1,32 +1,39 @@
 import * as TicketsActions from '../../actions/tickets';
 import * as UserActions from '../../actions/user';
 import AddProject from './AddProject';
+import CreateTicketForm from './CreateTicketForm';
 import Projects from './Projects';
 import React, { Component } from 'react';
 import Table from './Table';
 import ToggleProjects from './ToggleProjects';
+import EditTicketForm from './EditTicketForm';
 import classnames from 'classnames';
 import sortBy from 'sort-by';
 import { connect } from 'react-redux';
 import { search } from '../../actions/tickets';
 
 class Tickets extends Component {
-  constructor() {
-    super();
-
-    this.state = {
-      expanded: '',
-    }
-
-    this.addProject = this.addProject.bind(this);
-    this.expand = this.expand.bind(this);
-    this.projects = this.projects.bind(this);
-    this.search = this.search.bind(this);
-    this.toggleColumn = this.toggleColumn.bind(this);
-    this.toggleProject = this.toggleProject.bind(this);
+  state = {
+    expanded: '',
+    isEditingTicket: false,
+    selectedProject: {},
   }
 
-  projects() {
+  componentDidUpdate = (prevProps) => {
+    if (prevProps.tickets.query !== this.props.tickets.query) {
+      this.setSelectedProject();
+    }
+  }
+
+  setSelectedProject = () => {
+    const selectedProject = this.props.tickets.query;
+
+    this.setState({
+      selectedProject
+    });
+  }
+
+  projects = () => {
     // We can use the first ticket from each project to get the project's metadata
     const projects = Object.keys(this.props.tickets.nested).map(projectId => {
       return this.props.tickets.nested[projectId][0];
@@ -35,23 +42,23 @@ class Tickets extends Component {
     return projects.sort(sortBy('company.name', 'project.name'));
   }
 
-  addProject(projectId) {
+  addProject = (projectId) => {
     this.props.dispatch(TicketsActions.updateTickets({ projectId }));
     this.toggleProject(projectId, true);
   }
 
-  toggleProject(projectId, checked) {
+  toggleProject = (projectId, checked) => {
     this.props.dispatch(UserActions.toggleProject({
       add: checked,
       projectId,
     }));
   }
 
-  toggleColumn(payload) {
+  toggleColumn = (payload) => {
     this.props.dispatch(UserActions.toggleColumn(payload));
   }
 
-  search(query, incremental) {
+  search = (query, incremental) => {
     let nextQuery = query;
     if (incremental) {
       nextQuery = {
@@ -63,7 +70,11 @@ class Tickets extends Component {
     this.props.dispatch(search(nextQuery));
   }
 
-  expand(id) {
+  addNewTicketToColumns = payload => {
+    this.props.dispatch(TicketsActions.updateSingleTicket(payload));
+  }
+
+  expand = (id) => {
     const isExpanded = this.state.expanded === id;
     let nextState = id;
     if (isExpanded) {
@@ -119,6 +130,12 @@ class Tickets extends Component {
                 }, true)}
               />
             </div>
+            <CreateTicketForm
+              addNewTicketToColumns={this.addNewTicketToColumns}
+              projects={this.projects()}
+              selectedProject={this.state.selectedProject}
+              tickets={this.props.tickets.flattened}
+            />
             {this.props.tickets.flattened.length > 0 && (
               <Table
                 id="table-search-tickets"

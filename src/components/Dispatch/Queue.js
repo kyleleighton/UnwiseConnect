@@ -2,19 +2,15 @@ import React, { Component } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 export default class Queue extends Component {
-  constructor() {
-    super();
-
-    this.state = {
-      expanded: false,
-    }
+  state = {
+    expanded: false,
   }
 
-  isOverBudget(ticket) {
+  isOverBudget = (ticket) => {
     return ticket.actualHours > ticket.budgetHours;
   }
 
-  overriddenHours(ticketId) {
+  overriddenHours = (ticketId) => {
     const override = this.props.overrideHours.find(ticket => ticket.id === ticketId);
     if (!override) {
       return undefined;
@@ -27,7 +23,7 @@ export default class Queue extends Component {
     return Number(override.hours);
   }
 
-  totalBudget() {
+  totalBudget = () => {
     const { selectedTickets: tickets } = this.props;
     const totalHours = tickets.map(ticket => {
       const override = this.overriddenHours(ticket.id);
@@ -58,6 +54,9 @@ export default class Queue extends Component {
   }
 
   render() {
+    const selectedTicketCount = this.props.selectedTickets.length;
+    const ticketCountText = `${selectedTicketCount} ${selectedTicketCount === 1 ? 'ticket' : 'tickets'}`;
+
     return (
       <div>
         <button 
@@ -66,11 +65,11 @@ export default class Queue extends Component {
           style={{ marginTop: '20px', marginBottom: '20px' }}
           type="button"
         >
-          <h2 style={{ margin: 0 }}>Queue ({this.props.selectedTickets.length} tickets, {this.totalBudget()} hours)</h2>
+          <h2 style={{ margin: 0 }}>Queue ({ticketCountText}, {`${this.totalBudget()} ${this.totalBudget() == 1 ? 'hour' : 'hours'}`})</h2>
         </button>
         {this.state.expanded && (
           <div>
-            <p>{this.props.selectedTickets.length} tickets selected.</p>
+            <p>{ticketCountText} selected.</p>
             {this.props.selectedTickets.length > 0 && (
               <button
                 onClick={this.props.resetTickets}

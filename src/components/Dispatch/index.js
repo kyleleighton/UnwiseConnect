@@ -1,4 +1,4 @@
-import './dispatch.css';
+import './dispatch.scss';
 import * as UserActions from '../../actions/user';
 import * as resolve from 'table-resolver';
 import * as searchtabular from 'searchtabular';
@@ -14,7 +14,8 @@ import { customField } from '../../config/columns';
 import { format as formatDate } from 'date-fns';
 import { multiInfix } from '../../helpers/utils';
 import { search, dispatch as dispatchTickets } from '../../actions/tickets';
-import Summary from "../shared/Summary";
+import Summary from '../shared/Summary';
+import ToggleProjects from '../Tickets/ToggleProjects';
 
 const fields = [
   {
@@ -152,32 +153,15 @@ const fields = [
 ];
 
 class Dispatch extends Component {
-  constructor() {
-    super();
+  state = {
+    fields, 
+  };
 
-    this.state = {
-      fields, 
-    };
-
-    this.columns = this.columns.bind(this);
-    this.addFiltered = this.addFiltered.bind(this);
-    this.dispatch = this.dispatch.bind(this);
-    this.onFieldChange = this.onFieldChange.bind(this);
-    this.onTicketSelect = this.onTicketSelect.bind(this);
-    this.resetTickets = this.resetTickets.bind(this);
-    this.search = this.search.bind(this);
-    this.selectedTickets = this.selectedTickets.bind(this);
-    this.selectedTicketIds = this.selectedTicketIds.bind(this);
-    this.isTicketSelected = this.isTicketSelected.bind(this);
-    this.setTicketHours = this.setTicketHours.bind(this);
-    this.toggleColumn = this.toggleColumn.bind(this);
-  }
-
-  toggleColumn(payload) {
+  toggleColumn = (payload) => {
     this.props.dispatch(UserActions.toggleColumn(payload));
   }
 
-  columns(onChange) {
+  columns = (onChange) => {
     return [
       {
         // Using a random property because it's easier than adding a new one
@@ -299,7 +283,7 @@ class Dispatch extends Component {
     ] 
   }
 
-  search(query, incremental) {
+  search = (query, incremental) => {
     let nextQuery = query;
     if (incremental) {
       nextQuery = {
@@ -311,7 +295,7 @@ class Dispatch extends Component {
     this.props.dispatch(search(nextQuery));
   }
 
-  selectedTicketIds() {
+  selectedTicketIds = () => {
     const tickets = this.state.fields.find(field => field.id === 'tickets');
     if (!tickets) {
       console.warn('No tickets field found.');
@@ -321,17 +305,17 @@ class Dispatch extends Component {
     return tickets.value.map(ticket => ticket.id);
   }
 
-  selectedTickets() {
+  selectedTickets = () => {
     return this.selectedTicketIds().map(id => {
       return this.props.tickets.flattened.find(ticket => String(ticket.id) === String(id));
     });
   }
 
-  isTicketSelected(ticketId) {
+  isTicketSelected = (ticketId) => {
     return this.selectedTicketIds().includes(ticketId);
   }
 
-  resetTickets() {
+  resetTickets = () => {
     this.setState({
       fields: this.state.fields.map(field => {
         if (field.id === 'tickets') {
@@ -346,7 +330,7 @@ class Dispatch extends Component {
     });
   }
 
-  onTicketSelect(id) {
+  onTicketSelect = (id) => {
     const selectedIds = this.selectedTicketIds();
     if (selectedIds.indexOf(id) === -1) {
       // Adding a ticket
@@ -397,7 +381,7 @@ class Dispatch extends Component {
     });
   }
 
-  addFiltered(e) {
+  addFiltered = (e) => {
     const columns = this.columns(this.onTicketSelect);
     const { query } = this.props.tickets;
     const tickets = this.props.tickets.flattened;
@@ -440,7 +424,7 @@ class Dispatch extends Component {
     }
   }
 
-  onFieldChange(id, type, e) {
+  onFieldChange = (id, type, e) => {
     let { value } = e.target;
     if (type === 'boolean') {
       value = e.target.checked;
@@ -460,7 +444,7 @@ class Dispatch extends Component {
     });
   }
 
-  setTicketHours(id, hours) {
+  setTicketHours = (id, hours) => {
     this.setState({
       fields: this.state.fields.map(field => {
         if (field.id === 'tickets') {
@@ -484,7 +468,7 @@ class Dispatch extends Component {
     });
   }
 
-  dispatch() {
+  dispatch = () => {
     const params = Object.assign(...this.state.fields.map(field => {
       if (field.isCustomField) {
         // We'll handle custom fields separately
@@ -517,6 +501,9 @@ class Dispatch extends Component {
         <div className="panel-uc panel panel-default">
           <div className="panel-uc__heading panel-heading clearfix">
             <h4>Dispatch Center</h4>
+            <div className="dispatch-ticket-update">
+              <ToggleProjects />
+            </div>
           </div>
           <div className="panel-body">
             <header className="dispatch-header">
