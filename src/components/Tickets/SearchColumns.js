@@ -100,7 +100,8 @@ class SearchColumns extends React.Component {
         dataField: column.property,
         text: column.header.label,
         sort: true,
-        editable: false
+        editable: false,
+        formatter: column.formatter
       }
 
       options.map(option => {

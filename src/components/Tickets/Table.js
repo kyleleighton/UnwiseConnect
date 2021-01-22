@@ -275,17 +275,7 @@ TicketsTable.defaultProps = {
       header: {
         label: 'ID',
       },
-      cell: {
-        formatters: [
-          (value) => {
-            return (
-              <div>
-                <TicketLink ticketNumber={value} />
-              </div>
-            );
-          }
-        ]
-      },
+      formatter: (cell, row) => <TicketLink ticketNumber={row.id} />,
       props: {
         style: {
           width: 115,
@@ -315,11 +305,6 @@ TicketsTable.defaultProps = {
       property: 'summary',
       header: {
         label: 'Name',
-      },
-      cell: {
-        formatters: [
-          (value, { rowData }) => (<Summary summary={rowData.summary} company={rowData.company} value={value}/>)
-        ],
       },
       props: {
         style: {
@@ -400,19 +385,14 @@ TicketsTable.defaultProps = {
         TicketsTable.makeAllOpenOption,
         TicketsTable.makeAllCompleteOption,
       ],
-      cell: {
-        formatters: [
-          (value, { rowData }) => {
-            return (
-              <UpdateStatus 
-                projectId={rowData.project.id}
-                ticket={rowData.id} 
-                value={value}
-              />
-            );
-          }
-        ],
-      },
+      formatter: (cell, row) => (
+        // <UpdateStatus 
+        //   projectId={rowData.project.id}
+        //   ticket={rowData.id} 
+        //   value={row.id}
+        // />
+        <p>hi</p>
+      ),
     },
     {
       property: 'billTime',
@@ -431,19 +411,13 @@ TicketsTable.defaultProps = {
       header: {
         label: 'Actions',
       },
-      cell: {
-        formatters: [
-          (value, { rowData }) => {
-            return (
-              <div className="column-actions">
-                <StartTimer ticket={rowData} />
-                <DetailsModal ticketNumber={rowData.id} />
-                <EditTicketForm ticketNumber={rowData.id} />
-              </div>
-            );
-          }
-        ]
-      },
+      formatter: (cell, row) => (
+        <div className="column-actions">
+          {/* <StartTimer ticket={row} /> */}
+          <DetailsModal ticketNumber={row.id} />
+          <EditTicketForm ticketNumber={row.id} />
+        </div>
+      ),
       props: {
         style: {
           width: 120,
