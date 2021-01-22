@@ -386,12 +386,11 @@ TicketsTable.defaultProps = {
         TicketsTable.makeAllCompleteOption,
       ],
       formatter: (cell, row) => (
-        // <UpdateStatus 
-        //   projectId={rowData.project.id}
-        //   ticket={rowData.id} 
-        //   value={row.id}
-        // />
-        <p>hi</p>
+        <UpdateStatus 
+          projectId={145}
+          ticket={row.id} 
+          value={row['status.name']}
+        />
       ),
     },
     {
@@ -413,9 +412,10 @@ TicketsTable.defaultProps = {
       },
       formatter: (cell, row) => (
         <div className="column-actions">
+        <p>hey</p>
           {/* <StartTimer ticket={row} /> */}
-          <DetailsModal ticketNumber={row.id} />
-          <EditTicketForm ticketNumber={row.id} />
+          {/* <DetailsModal ticketNumber={row.id} />
+          <EditTicketForm ticketNumber={row.id} /> */}
         </div>
       ),
       props: {
