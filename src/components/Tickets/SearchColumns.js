@@ -5,11 +5,13 @@ import BootstrapTable from 'react-bootstrap-table-next';
 import paginationFactory, { PaginationProvider } from 'react-bootstrap-table2-paginator';
 import filterFactory, { textFilter, selectFilter } from 'react-bootstrap-table2-filter';
 import cellEditFactory, { Type } from 'react-bootstrap-table2-editor';
+import { className } from 'react-pagify-preset-bootstrap';
 
 class SearchColumns extends React.Component {
   state = {
     columns: [],
-    rows: []
+    rows: [],
+    stop: false
   }
 
   componentDidUpdate = (prevProps) => {
@@ -99,9 +101,14 @@ class SearchColumns extends React.Component {
       const defaultColumnData = {
         dataField: column.property,
         text: column.header.label,
-        sort: true,
+        sort: column.allowSort == false ? false : true,
+        // rowClasses: className || '',
         editable: false,
-        formatter: column.formatter
+        formatter: column.formatter,
+         headerStyle: (colum, colIndex) => {
+          return { width: `${column.width}px` || 'auto'};
+        },
+        style: {'width': `${column.width}px`, textAlign: column.textAlign || 'left'}
       }
 
       options.map(option => {
@@ -116,7 +123,9 @@ class SearchColumns extends React.Component {
           ...defaultColumnData,
           filter: selectFilter({
             delay: 0,
-            options: { ...options }
+            options: { ...options },
+        placeholder: ''
+
           }),
           editor: {
             type: Type.SELECT,
@@ -132,6 +141,7 @@ class SearchColumns extends React.Component {
         columns.push({
           ...defaultColumnData,
           filter: textFilter({
+            placeholder: ' ',
             delay: 0
           })
         })        
@@ -154,6 +164,8 @@ class SearchColumns extends React.Component {
         'actualHours': row.actualHours,
         'billTime': row.billTime,
         'resources': row.resources,
+        'projectId': row.project.id,
+        row,
         'id': row.id,
         'summary': row.summary,
         'impact': row.impact,

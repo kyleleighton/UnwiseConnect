@@ -276,11 +276,7 @@ TicketsTable.defaultProps = {
         label: 'ID',
       },
       formatter: (cell, row) => <TicketLink ticketNumber={row.id} />,
-      props: {
-        style: {
           width: 115,
-        },
-      },
     },
     {
       property: 'phase.path',
@@ -306,11 +302,7 @@ TicketsTable.defaultProps = {
       header: {
         label: 'Name',
       },
-      props: {
-        style: {
           width: 300,
-        },
-      },
     },
     {
       property: 'customFields',
@@ -320,11 +312,7 @@ TicketsTable.defaultProps = {
       cell: {
         ...customField('Sprint'),
       },
-      props: {
-        style: {
           width: 100,
-        },
-      },
     },
     {
       // Using a random property because it's easier than adding a new one
@@ -336,24 +324,16 @@ TicketsTable.defaultProps = {
       cell: {
         ...customField('Fixer'),
       },
-      props: {
-        style: {
           width: 100,
-        },
-      },
     },
     {
       property: 'budgetHours',
       header: {
         label: 'Budget Hours',
       },
-      props: {
         className: 'col--budget',
-        style: {
           width: 75,
           textAlign: 'right',
-        },
-      },
       showTotals: true,
     },
     {
@@ -361,13 +341,9 @@ TicketsTable.defaultProps = {
       header: {
         label: 'Actual Hours',
       },
-      props: {
         className: 'col--budget',
-        style: {
           width: 75,
           textAlign: 'right',
-        },
-      },
       showTotals: true,
     },
     {
@@ -375,11 +351,8 @@ TicketsTable.defaultProps = {
       header: {
         label: 'Status',
       },
-      props: {
-        style: {
+      allowSort: false,
           width: 200,
-        },
-      },
       filterType: 'dropdown',
       extraOptions: [
         TicketsTable.makeAllOpenOption,
@@ -387,7 +360,7 @@ TicketsTable.defaultProps = {
       ],
       formatter: (cell, row) => (
         <UpdateStatus 
-          projectId={145}
+          projectId={row.projectId}
           ticket={row.id} 
           value={row['status.name']}
         />
@@ -407,23 +380,18 @@ TicketsTable.defaultProps = {
     },
     {
       property: 'mobileGuid',
+      allowSort: false,
       header: {
         label: 'Actions',
       },
       formatter: (cell, row) => (
         <div className="column-actions">
-        <p>hey</p>
-          {/* <StartTimer ticket={row} /> */}
-          {/* <DetailsModal ticketNumber={row.id} />
-          <EditTicketForm ticketNumber={row.id} /> */}
+          <StartTimer ticket={row.id} summary={row.summary} />
+          <DetailsModal ticketNumber={row.id} />
+          <EditTicketForm ticketNumber={row.id} />
         </div>
       ),
-      props: {
-        style: {
           width: 120,
-        },
-      },
-      filterType: 'none',
     },
   ],
 };
