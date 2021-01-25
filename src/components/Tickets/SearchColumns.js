@@ -114,8 +114,10 @@ class SearchColumns extends React.Component {
       if (column.filterType === 'dropdown') {
         columns.push({
           ...defaultColumnData,
-          filter: selectFilter({ options: { ...options } }),
-          editable: true,
+          filter: selectFilter({
+            delay: 0,
+            options: { ...options }
+          }),
           editor: {
             type: Type.SELECT,
             options: [...dropdownOptions]
@@ -129,7 +131,9 @@ class SearchColumns extends React.Component {
       } else {
         columns.push({
           ...defaultColumnData,
-          filter: textFilter()
+          filter: textFilter({
+            delay: 0
+          })
         })        
       }
     });
@@ -181,7 +185,7 @@ class SearchColumns extends React.Component {
                 paginationProps,
                 paginationTableProps
               }) => (
-                <BootstrapTable cellEdit={ cellEditFactory({ mode: 'click' }) } { ...paginationTableProps } pagination={ paginationFactory()} filter={ filterFactory()} classes="table table-striped table-bordered" keyField='id' data={ this.state.rows } columns={ this.state.columns } />
+                <BootstrapTable { ...paginationTableProps } pagination={ paginationFactory()} filter={ filterFactory()} classes="table table-striped table-bordered" keyField='id' data={ this.state.rows } columns={ this.state.columns } />
               ) 
             }
           </PaginationProvider>
