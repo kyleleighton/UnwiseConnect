@@ -126,7 +126,8 @@ class SearchColumns extends React.Component {
         headerStyle: (colum, colIndex) => {
           return { width: `${column.width}px` || 'auto'};
         },
-        style: {'width': `${column.width}px`, textAlign: column.textAlign || 'left'}
+        style: {'width': `${column.width}px`, textAlign: column.textAlign || 'left'},
+        footer: () => column.showTotals ? this.props.footerSum(this.props.paginatedAll, column.property) : null
       }
 
       options.map(option => {

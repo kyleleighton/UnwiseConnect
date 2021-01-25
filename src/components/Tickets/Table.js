@@ -208,6 +208,8 @@ export default class TicketsTable extends React.Component {
           rows={rows}
           ticketCount={this.props.tickets.length}
           onBodyRow={this.onBodyRow}
+          paginatedAll={paginatedAll}
+          footerSum={this.footerSum}
         />
       </div>
     );
