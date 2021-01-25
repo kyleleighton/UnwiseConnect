@@ -88,11 +88,25 @@ class SearchColumns extends React.Component {
     }
     return option;
   }
+  rowClasses = (row, rowIndex) => {
+    const actualHours = row.actualHours;
+    const budgetHours = row.budgetHours;
+    let rowClass = null;
 
-rowClasses = (name) => {
-  
-};
+    if (typeof budgetHours === 'undefined' || typeof actualHours === 'undefined') {
+      return;
+    }
 
+    if (actualHours > budgetHours) {
+      // over 100% of the budget is already used
+      rowClass = 'ticket--overbudget';
+    } else if (actualHours / budgetHours >= .9) {
+      // over 90% of the budget is already used
+      rowClass = 'ticket--nearbudget';
+    }
+
+    return rowClass;
+  };
   compileColumns = () => {
     let columns = [];
 
@@ -108,7 +122,7 @@ rowClasses = (name) => {
         sort: column.allowSort == false ? false : true,
         editable: false,
         formatter: column.formatter,
-         headerStyle: (colum, colIndex) => {
+        headerStyle: (colum, colIndex) => {
           return { width: `${column.width}px` || 'auto'};
         },
         style: {'width': `${column.width}px`, textAlign: column.textAlign || 'left'}
@@ -209,7 +223,7 @@ rowClasses = (name) => {
                 keyField='id'
                 data={ this.state.rows }
                 columns={ this.state.columns }
-                  rowClasses= 'hi'
+                rowClasses= {this.rowClasses}
                 />
               ) 
             }

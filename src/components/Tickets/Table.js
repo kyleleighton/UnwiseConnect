@@ -141,9 +141,7 @@ export default class TicketsTable extends React.Component {
       rowClass = 'ticket--nearbudget';
     }
 
-    return {
-      className: rowClass
-    };
+    return rowClass;
   }
 
   footerSum = (rows, property) => {
@@ -209,6 +207,7 @@ export default class TicketsTable extends React.Component {
           onChange={this.search}
           rows={rows}
           ticketCount={this.props.tickets.length}
+          onBodyRow={this.onBodyRow}
         />
       </div>
     );
