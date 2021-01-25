@@ -122,6 +122,7 @@ class SearchColumns extends React.Component {
         sort: column.allowSort == false ? false : true,
         editable: false,
         formatter: column.formatter,
+        classes: column.className,
         headerStyle: (colum, colIndex) => {
           return { width: `${column.width}px` || 'auto'};
         },
