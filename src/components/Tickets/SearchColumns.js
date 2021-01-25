@@ -89,6 +89,10 @@ class SearchColumns extends React.Component {
     return option;
   }
 
+rowClasses = (name) => {
+  
+};
+
   compileColumns = () => {
     let columns = [];
 
@@ -102,7 +106,6 @@ class SearchColumns extends React.Component {
         dataField: column.property,
         text: column.header.label,
         sort: column.allowSort == false ? false : true,
-        // rowClasses: className || '',
         editable: false,
         formatter: column.formatter,
          headerStyle: (colum, colIndex) => {
@@ -148,7 +151,7 @@ class SearchColumns extends React.Component {
       }
     });
     this.setState({
-      columns
+      columns,
     });
     this.compileRows();
     return columns;
@@ -172,7 +175,7 @@ class SearchColumns extends React.Component {
         'budgetHours': row.budgetHours || '',
         'actualHours': row.actualHours || '',
         'status.name': row['status.name'],
-        'customFields': row.customFields
+        'customFields': row.customFields,
       }
     })
     const uniqueRowValues = [ ...new Set(rows) ];
@@ -197,7 +200,17 @@ class SearchColumns extends React.Component {
                 paginationProps,
                 paginationTableProps
               }) => (
-                <BootstrapTable { ...paginationTableProps } pagination={ paginationFactory()} filter={ filterFactory()} classes="table table-striped table-bordered" keyField='id' data={ this.state.rows } columns={ this.state.columns } />
+                <BootstrapTable
+
+                { ...paginationTableProps }
+                pagination={ paginationFactory()}
+                filter={ filterFactory()}
+                classes="table table-striped table-bordered"
+                keyField='id'
+                data={ this.state.rows }
+                columns={ this.state.columns }
+                  rowClasses= 'hi'
+                />
               ) 
             }
           </PaginationProvider>
