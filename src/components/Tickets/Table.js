@@ -15,22 +15,6 @@ import { multiInfix } from '../../helpers/utils';
 import Summary from "../shared/Summary";
 import EditTicketForm from '../Tickets/EditTicketForm'
 
-function paginate({ page, perPage }) {
-  return (rows = []) => {
-    // adapt to zero indexed logic
-    const p = page - 1 || 0;
-
-    const amountOfPages = Math.ceil(rows.length / perPage);
-    const startPage = p < amountOfPages ? p : 0;
-
-    return {
-      amount: amountOfPages,
-      rows: rows.slice(startPage * perPage, startPage * perPage + perPage),
-      page: startPage,
-    };
-  };
-}
-
 function difference(arr1, arr2) {
   return arr1.filter(val => !arr2.includes(val));
 }
@@ -172,22 +156,7 @@ export default class TicketsTable extends React.Component {
     const { columns, pagination, rows } = this.state;
     const searchExecutor = search.multipleColumns({ columns, query, strategy: multiInfix });
     const paginatedAll = compose(searchExecutor)(rows);
-    const paginated = compose(
-      paginate(pagination),
-      searchExecutor
-    )(rows);
     const visibleColumns = columns.filter(column => this.props.userColumns.includes(column.property));
-    const TableFooter = ({ columns, rows }) => {
-      return (
-        <tfoot className="table-bordered__foot">
-          <tr>
-            {columns.map((column, i) =>
-              <td key={`footer-${i}`} className="col--budget">{column.showTotals ? this.footerSum(paginatedAll, column.property) : null}</td>
-            )}
-          </tr>
-        </tfoot>
-      );
-    };
 
     return (
       <div id={this.getHtmlId()}>
@@ -197,10 +166,9 @@ export default class TicketsTable extends React.Component {
           columns={columns}
           onToggleColumn={this.toggleColumn}
         />
-
-      {this.props.userColumns.length === 0 && (
-        <div className="alert alert-warning">You haven't selected any columns above. That's why you don't see any tickets.</div>
-      )}
+        {this.props.userColumns.length === 0 && (
+          <div className="alert alert-warning">You haven't selected any columns above. That's why you don't see any tickets.</div>
+        )}
         <SearchColumns
           query={query}
           columns={visibleColumns}
